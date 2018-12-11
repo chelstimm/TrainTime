@@ -19,10 +19,10 @@
   $("#add-train").on("click", function (event) {
       event.preventDefault();
 
-    //   console.log(name)
-    //   console.log(destination)
-    //   console.log(frequency);
-    //   console.log(firstTrain);
+      console.log(name)
+      console.log(destination)
+      console.log(frequency);
+      console.log(firstTrain);
 
       name = $("#name-input").val().trim();
       destination = $("#destination-input").val().trim();
@@ -32,74 +32,58 @@
        //Clears out textbox
        $("#name-input, #destination-input, #first-train-input, #frequency-input").val('');
 
-    //   $("#tableBody").append("<tr> <td>" + name + "</td> <td>" + destination + "</td> <td>" + frequency + "</td> <td>");
-
       database.ref().push({
           name: name,
           destination: destination,
           frequency: frequency,
           firstTrain: firstTrain,
       });
-     
   });
 
   database.ref().on("child_added", function (childSnapshot) {
 
-      console.log(childSnapshot.val().name);
-      console.log(childSnapshot.val().destination);
-      console.log(childSnapshot.val().frequency);
-      console.log(childSnapshot.val().firstTrain);
+    //   console.log(childSnapshot.val().name);
+    //   console.log(childSnapshot.val().destination);
+    //   console.log(childSnapshot.val().frequency);
+    //   console.log(childSnapshot.val().firstTrain);
 
 // displays data to table body
-      $("#tableBody").append(
-          "<tr class='well'><td class='train-name'> " + childSnapshot.val().name +
-          " </td><td class='train-destination'> " + childSnapshot.val().destination +
-          " </td><td class='train-frequency'> " + childSnapshot.val().frequency +
-          " </td><td class='train-nextArrival'> " + childSnapshot.val().nextArrival +
-          " </td><td class='train-minutesAway'> " + childSnapshot.val().minutesAway +
-          " </td></tr>");
+    //   $("#tableBody").append(
+          name = childSnapshot.val().name;
+          destination = childSnapshot.val().destination;
+          frequency = childSnapshot.val().frequency;
+          firstTrain = childSnapshot.val().firstTrain;
 
-  database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
+//   database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
 
-      //   // Change the HTML to reflect
-      // $("#name-input").text(snapshot.val().name);
-      // $("#role-input").text(snapshot.val().role);
-      // $("#startDate-input").text(snapshot.val().startDate);
-      // $("#monthsWorked-input").text(snapshot.val().monthsWorked);
-      // $("#monthlyRate-input").text(snapshot.val().monthlyRate);
-      // $("#totalBilled-input").text(snapshot.val().totalBilled);
-
-  });
-});
-
-  var convertedTime = moment(firstTime, "HH:mm");
+  var convertedTime = moment(firstTrain, "HH:mm");
         // console.log("TIME CONVERTED: " + firsttimeMoment);
 
  // It is Now - moment
- var currenttime = moment();
+ var currentTime = moment();
  // console.log("Now TIME: " + currenttime);
 
-var nextArrival = currenttime.diff(convertedTime, 'minutes');
-var minuteLast = nextArrival % frequency;
+var minuteArrival = currentTime.diff(convertedTime, 'minutes');
+var minuteLast = minuteArrival % frequency;
 var minutesAway = frequency - minuteLast;
 
 // console.log("Minutes: " + minuteArrival);
 // console.log("Minutes Last: " + minuteLast);
 // console.log("Away Train: " + awayTrain);
 
-var nextArrival = currenttime.add(awayTrain, 'minutes');
-var arrivaltime = nextArrival.format("HH:mm");
+var arrivalTime = currentTime.add(minutesAway, 'minutes');
+var nextArrival = arrivalTime.format("HH:mm");
 // console.log("Away Arrival: " + nextArrival);
 // console.log("Arrival Time: " + arrivaltime);
 
 
 // full list of items to the well
-$("#AddTrain").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td>");
+$("#tableBody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td><tr>");
 
-// Handle the errors
-// function(errorObject) {
-// console.log("Errors handled: " + errorObject.code);
-// };
+// // // Handle the errors
+  }, function (errorObject) {
+console.log("Errors handled: " + errorObject.code);
+});
 
   
 //   // Time apart (remainder)

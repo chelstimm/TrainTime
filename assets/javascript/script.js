@@ -39,7 +39,6 @@ var config = {
           frequency: frequency,
           firstTrain: firstTrain,
           date_added: firebase.database.ServerValue.TIMESTAMP
-    
   });
 });
 
@@ -56,8 +55,9 @@ var config = {
           frequency = childSnapshot.val().frequency;
           firstTrain = childSnapshot.val().firstTrain;
           
+          
 
-var convertedTime = moment(firstTrain, "h:mm A");
+var convertedTime = moment(firstTrain, "h:mm A").subtract(1, "years");
 console.log("TIME CONVERTED: " + convertedTime);
 
  // It is Now - moment
@@ -81,8 +81,8 @@ console.log("Arrival Time: " + nextArrival);
 
 //Display to table
 $("#tableBody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td><tr>");
-
+},
 // Handle the errors
-  }, function (errorObject) {
+function (errorObject) {
 console.log("Errors handled: " + errorObject.code);
 });

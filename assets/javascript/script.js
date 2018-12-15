@@ -1,5 +1,5 @@
-  // Initialize Firebase
-  var config = {
+ // Initialize Firebase
+ var config = {
     apiKey: "AIzaSyCNXp49pTAJo_D0mlI3wmCrY0x3ig-IO2k",
     authDomain: "chelshw-eedc0.firebaseapp.com",
     databaseURL: "https://chelshw-eedc0.firebaseio.com",
@@ -17,8 +17,8 @@
   var firstTrain = "";
 
   $("#add-train").on("click", function (event) {
-      event.preventDefault();
-
+    event.preventDefault();
+    
       console.log(name)
       console.log(destination)
       console.log(frequency);
@@ -37,63 +37,54 @@
           destination: destination,
           frequency: frequency,
           firstTrain: firstTrain,
+          date_added: firebase.database.ServerValue.TIMESTAMP
       });
   });
 
   database.ref().on("child_added", function (childSnapshot) {
 
-    //   console.log(childSnapshot.val().name);
-    //   console.log(childSnapshot.val().destination);
-    //   console.log(childSnapshot.val().frequency);
-    //   console.log(childSnapshot.val().firstTrain);
+      console.log(childSnapshot.val().name);
+      console.log(childSnapshot.val().destination);
+      console.log(childSnapshot.val().frequency);
+      console.log(childSnapshot.val().firstTrain);
 
 // displays data to table body
-    //   $("#tableBody").append(
           name = childSnapshot.val().name;
           destination = childSnapshot.val().destination;
           frequency = childSnapshot.val().frequency;
           firstTrain = childSnapshot.val().firstTrain;
 
-//   database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
-
-  var convertedTime = moment(firstTrain, "HH:mm");
-        // console.log("TIME CONVERTED: " + firsttimeMoment);
+var convertedTime = moment(firstTrain, "hh:mm A");
+console.log("TIME CONVERTED: " + convertedTime);
 
  // It is Now - moment
  var currentTime = moment();
- // console.log("Now TIME: " + currenttime);
+ console.log("Now TIME: " + currentTime);
 
 var minuteArrival = currentTime.diff(convertedTime, 'minutes');
-var minuteLast = minuteArrival % frequency;
-var minutesAway = frequency - minuteLast;
+console.log("Minutes: " + minuteArrival);
 
-// console.log("Minutes: " + minuteArrival);
-// console.log("Minutes Last: " + minuteLast);
-// console.log("Away Train: " + awayTrain);
+var minuteLast = minuteArrival % frequency;
+console.log("Minutes Last: " + minuteLast);
+
+var minutesAway = frequency - minuteLast;
+console.log("Away Train: " + minutesAway);
 
 var arrivalTime = currentTime.add(minutesAway, 'minutes');
-var nextArrival = arrivalTime.format("HH:mm");
-// console.log("Away Arrival: " + nextArrival);
-// console.log("Arrival Time: " + arrivaltime);
+console.log("Away Arrival: " + arrivalTime);
 
+var nextArrival = arrivalTime.format("h:mm A");
+console.log("Arrival Time: " + nextArrival);
 
-// full list of items to the well
+//Display to table
 $("#tableBody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td>" + frequency + "</td><td>" + nextArrival + "</td><td>" + minutesAway + "</td><tr>");
 
-// // // Handle the errors
+// Handle the errors
   }, function (errorObject) {
 console.log("Errors handled: " + errorObject.code);
+
+//    // Only adds buttons if input field is not blank and topic has not already been added
+//    if (name.length === 0 || destination.length === 0 || frequency.length === 0 || firstTrain.length === 0) {
+//     alert("Please Fill All Required Fields");
+// }
 });
-
-  
-//   // Time apart (remainder)
-//   var tRemainder = diffTime % tFrequency;
-//   console.log(tRemainder);
-
-//   // Minute Until Train
-//   var tMinutesTillTrain = tFrequency - tRemainder;
-//   console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-
-//   // Next Train
-//   var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-//   console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"))}

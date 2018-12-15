@@ -1,5 +1,5 @@
- // Initialize Firebase
- var config = {
+// Initialize Firebase
+var config = {
     apiKey: "AIzaSyCNXp49pTAJo_D0mlI3wmCrY0x3ig-IO2k",
     authDomain: "chelshw-eedc0.firebaseapp.com",
     databaseURL: "https://chelshw-eedc0.firebaseio.com",
@@ -24,6 +24,7 @@
       console.log(frequency);
       console.log(firstTrain);
 
+
       name = $("#name-input").val().trim();
       destination = $("#destination-input").val().trim();
       frequency = $("#frequency-input").val().trim();
@@ -38,8 +39,9 @@
           frequency: frequency,
           firstTrain: firstTrain,
           date_added: firebase.database.ServerValue.TIMESTAMP
-      });
+    
   });
+});
 
   database.ref().on("child_added", function (childSnapshot) {
 
@@ -53,8 +55,9 @@
           destination = childSnapshot.val().destination;
           frequency = childSnapshot.val().frequency;
           firstTrain = childSnapshot.val().firstTrain;
+          
 
-var convertedTime = moment(firstTrain, "hh:mm A");
+var convertedTime = moment(firstTrain, "h:mm A");
 console.log("TIME CONVERTED: " + convertedTime);
 
  // It is Now - moment
@@ -82,9 +85,4 @@ $("#tableBody").append("<tr><td>" + name + "</td><td>" + destination + "</td><td
 // Handle the errors
   }, function (errorObject) {
 console.log("Errors handled: " + errorObject.code);
-
-//    // Only adds buttons if input field is not blank and topic has not already been added
-//    if (name.length === 0 || destination.length === 0 || frequency.length === 0 || firstTrain.length === 0) {
-//     alert("Please Fill All Required Fields");
-// }
 });
